@@ -3,24 +3,25 @@ import './all.css'
 import { GoogleLogin } from '@react-oauth/google';
 
 
+function Signup() {
+  
+  
+  return (
+      <div>
+        <h1>Hello</h1>
 
-export default function signup() {
-    return(
+        {/* google login button  */}
         <div>
-
-            {/* google login button  */}
-            <div> 
-            <GoogleLogin
-            onSuccess={credentialResponse => {
-                console.log(credentialResponse);
-            }}
-            onError={() => {
+            <GoogleLogin onSuccess= {
+            credentialResponse=> {
+            console.log(credentialResponse);
+            }} 
+            onError= { ()=> {
                 console.log('Login Failed');
-            }}
-            />;
-            </div>
-
+            }} />;
         </div>
+      </div>
     );
-}
+  }
 
+export default Signup

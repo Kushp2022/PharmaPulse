@@ -14,13 +14,13 @@ function App() {
   //   .catch(error => {
   //     console.error('Error:', error); 
   // });
-  axios.get('http://127.0.0.1:8000/pharmacy_location/')
-    .then(response => {
-      console.log(response.data); 
-    })
-    .catch(error => {
-      console.error('Error:', error); 
-  });
+  // axios.get('http://127.0.0.1:8000/pharmacy_location/')
+  //   .then(response => {
+  //     console.log(response.data); 
+  //   })
+  //   .catch(error => {
+  //     console.error('Error:', error); 
+  // });
   
   return (
       <div className="relative mainAppDiv">
