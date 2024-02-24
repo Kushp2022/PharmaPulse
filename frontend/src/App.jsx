@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './all.css'
 import { GoogleLogin } from '@react-oauth/google';
 import WannaUseSvg from './assets/homeScreen.svg';
+import { Link } from 'react-router-dom';
 
 import axios from 'axios';
 
@@ -37,7 +38,9 @@ function App() {
             <li className='px-6 py-1 mt-1 text-lg font-sans'>About Us</li>
             <li className='px-6 py-1 mt-1 text-lg font-sans mr-3'>Contact Us</li>
           </ul>
+          <Link to="/signup">
           <button className='m-2 ring-2 ring-blue-500 ring-offset-4 ring-offset-slate-50 dark:ring-offset-slate-900 bg-white px-3 rounded-lg font-sans hover:bg-blue-500'> Sign Up </button>
+          </Link>
         </div>
 
         {/* Main container under navbar Left Side */}
@@ -45,7 +48,6 @@ function App() {
             <h1 className='text-5xl mr-auto py-5 font-sans font-bold text-blue-900'>PharmaPulse</h1>
             <h1 className='text-4xl roboto-mono-kp text-cyan-700 pb-50'>Navigate Medication with Confidence</h1>
             <button className='mt-10 mr-auto m-2 ring-2 ring-blue-500 ring-offset-4 ring-offset-slate-50 dark:ring-offset-slate-900 bg-white px-3 rounded-lg font-sans hover:bg-blue-500'> Sign Up </button>
-
         </div>
 
       </div>
