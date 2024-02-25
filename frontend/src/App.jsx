@@ -24,6 +24,8 @@ function App() {
   //   .catch(error => {
   //     console.error('Error:', error); 
   // });
+
+
   const navigate = useNavigate();
     const textRef = useRef(null);
     const [textContent, setTextContent] = useState(''); // Initialize with your desired text
