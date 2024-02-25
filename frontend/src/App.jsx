@@ -31,7 +31,7 @@ function App() {
     // Handle successful login
     const handleSuccess = (credentialResponse) => {
         console.log(credentialResponse);
-        navigate('/signup');
+        navigate('/dashboard');
     };
 
     // Handle login failure

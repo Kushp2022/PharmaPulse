@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import React from 'react';
 import axios from 'axios';
+import Vector from './assets/Vector.svg';
 
 function Dashboard() {
 
@@ -35,28 +36,49 @@ function Dashboard() {
     }
 
     return (
-        <div>
-            <h1>How Many Servings Do You Have Left?</h1>
-            <label>
-                Name:
-                <input placeholder="Ex. 30" name="myInput" type="text"/>
-            </label>
+         <div className="relative w-full h-screen mainAppDiv">
+            {/* Background SVG */}
+            <img src={Vector} alt="Background SVG" className="absolute z-0 h-full object-cover right-[-13rem] top-10" />
 
-            <h1>How Many Servings Do You Take Per Day?</h1>
-            <label>
-                Name:
-                <input placeholder="Ex. 1" name="myInput" type="text"/>
-            </label>
+            {/* Second main Div */}
+            <div className="relative z-10">
 
+                {/* Navbar */}
+                <div className='w-full flex p-5 px-10 items-center'>
+                    <h1 className='text-2xl anta-regular'>PharmaPulse</h1>
+                    <ul className='flex ml-auto'>
+                        <li className='px-6 py-1 mt-1 text-lg font-sans'>Home</li>
+                        <li className='px-6 py-1 mt-1 text-lg font-sans'>Maps</li>
+                        <li className='px-6 py-1 mt-1 text-lg font-sans mr-3'>Shopping</li>
+                    </ul>
+                </div>
 
-            <h1>What Medications Do You Take?</h1>
-            <label>
-                Name:
-                <input placeholder="Ex. ibuprofen, advil, etc..." name="myInput" type="text" onBlur={userMedications}/>
-            </label>
+                {/* main contenent div dividing two parts */}
+                <div className="flex">
+
+                    {/* Form and first half*/}
+                    <div className='w-3/6 p-28 flex flex-col py-10 mt-20'>
+                        <h1 className="text-cyan-800 font-sans text-2xl font-bold py-5">How Many Servings Do You Have Left?</h1>
+                        <input className="bg-gray-200 text-black p-2 rounded-md mb-2" placeholder="Ex. 30" name="servingsLeft" type="text" />
+
+                        <h1 className="text-cyan-800 font-sans text-2xl font-bold py-5">How Many Servings Do You Take Per Day?</h1>
+                        <input className="bg-gray-200 text-black p-2 rounded-md mb-2" placeholder="Ex. 1" name="servingsPerDay" type="text" />
+
+                        <h1 className="text-cyan-800 font-sans text-2xl font-bold py-5">What Medications Do You Take?</h1>
+                        <input className="bg-gray-200 text-black p-2 rounded-md mb-2" placeholder="Ex. ibuprofen, advil, etc..." name="medications" type="text" onBlur={userMedications} />
+                    </div>
+                        
+                    {/* Second half dispays info*/}
+                    <div className="w-full p-20 pr-10 ml-24 flex items-center justify-center h-screen">
+                        <div className="bg-slate-100 w-full h-5/6 rounded-2xl flex items-center p-10 mb-20 border border-gray-400 shadow-xl">
+                            <h1 className="text-bold">Your info Goes here</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    );  
+    );
 }
 
-
 export default Dashboard
+
