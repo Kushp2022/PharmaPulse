@@ -28,12 +28,12 @@ function Dashboard() {;
         console.log("medications: ", medications);
         console.log(servingsLeft);
         console.log(servingPerDay);
-        if(medications.length != servingsLeft.length || medications.length != servingPerDay.length){
-            alert("All fields must be same length");
+        if (medications.length !== servingsLeft.length || medications.length !== servingPerDay.length) {
+            alert("All fields must be the same length");
             return;
         }
         const fd = new FormData();
-        if(servingsLeft && servingPerDay){
+        if (servingsLeft.length > 0 && servingPerDay.length > 0) {
             medications.forEach((medication, index) => {
                 console.log(medication);
                 fd.append(`medication`, medication);
@@ -43,7 +43,9 @@ function Dashboard() {;
                 fd.append(`servingsPerDay`, servingPerDay[index]);
             });
         }
-        console.log(fd);
+        for(let pair of fd.entries()) {
+            console.log(pair[0]+ ', '+ pair[1]); 
+        }
         // axios.post('http://127.0.0.1:8000/medication_info/', fd,
         // {
         // headers: {
