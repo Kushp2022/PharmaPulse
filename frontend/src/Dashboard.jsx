@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react'
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Vector from './assets/Vector.svg';
 import { Link } from 'react-router-dom';
@@ -10,6 +9,11 @@ function Dashboard() {
     const[servingsPerDay, setServingsPerDay] = useState();
     const[longitude, setLongitude] = useState();
     const[latitude, setLatitude] = useState();
+    const[medication, setMedication] = useState('');
+    const [daysRemaining, setDaysRemaining] = useState('');
+    const [symptoms, setSymptoms] = useState([]);
+
+
 
     const findMyState = () => {
         const status = document.querySelector('.status');
@@ -45,11 +49,20 @@ function Dashboard() {
     function userMedications(event) {
         const info = event.target.value;
         let medications = info.split(",").map(medication => medication.trim());
+       // let servingsLeft = info.split(",").map(servingsLeft => servingsLeft.trim());
+        //let servingsPerDay = info.split(",").map(servingsPerDay => servingsPerDay.trim());
+        
         const fd = new FormData();
         medications.forEach((medication, index) => {
             fd.append(`medication`, medication);
         });
+        // servingsLeft.forEach((servingsLeft, index) => {
+        //     fd.append(`servingsLeft`, servingsLeft);
+        // });
         fd.append('servingsLeft', servingsLeft);
+        // servingsPerDay.forEach((servingsPerDay, index) => {
+        //     fd.append(`servingsPerDay`, servingsPerDay);
+        // });
         fd.append('servingsPerDay', servingsPerDay);
 
         //console.log(servingsLeft, servingsPerDay);
@@ -63,12 +76,20 @@ function Dashboard() {
         .catch(err => console.log(err))
     }
 
-    function handleResponse(medication_info) {
-        for(let drug in medication_info.data){
-            console.log(drug);
-            console.log(medication_info.data[drug]);
+function handleResponse(medication_info) {
+    let allSymptoms = [];
+    setMedication(Object.keys(medication_info.data)[0]);
+    for (let drug in medication_info.data) {
+        console.log("this is drug", drug);
+        console.log(medication_info.data[drug]);
+        setDaysRemaining(medication_info.data[drug]); 
+        if (Array.isArray(medication_info.data[drug])) {
+            allSymptoms = allSymptoms.concat(medication_info.data[drug]); // Concatenate the symptoms
+                }
+            }
+            setSymptoms(allSymptoms); // Set the concatenated symptoms array
         }
-    }
+
 
     useEffect(() => {
         findMyState(); // This will be called once when the component mounts
@@ -111,7 +132,20 @@ function Dashboard() {
                     {/* Second half dispays info*/}
                     <div className="w-full p-20 pr-10 ml-24 flex items-center justify-center h-screen">
                         <div className="bg-stone-100 w-full h-5/6 rounded-2xl flex items-center p-10 mb-20 border border-gray-300 shadow-xl">
-                            <h1 className="text-bold">Your info Goes here</h1>
+                            <h1 className=""></h1>
+                                {medication && daysRemaining && symptoms && (
+                                    <ul>
+                                        <li>Medication: {medication}</li>
+                                        <li>Symptoms:
+                                           <ul className='p-2'>
+                                                {symptoms.map((symptom, index) => (
+                                                    <li key={index}>{symptom}</li>
+                                                ))}
+                                            </ul>
+                                        </li>
+                                        <li>Days Remaining: {daysRemaining}</li>
+                                    </ul>
+                                )}
                         </div>
                     </div>
                 </div>
