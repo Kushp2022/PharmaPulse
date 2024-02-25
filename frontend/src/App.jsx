@@ -10,21 +10,6 @@ import axios from 'axios';
 
 function App() {
   const [count, setCount] = useState(0)
-    // axios.get('http://127.0.0.1:8000/side_effects/')
-  //   .then(response => {
-  //     console.log(response.data); 
-  //   })
-  //   .catch(error => {
-  //     console.error('Error:', error); 
-  // });
-  // axios.get('http://127.0.0.1:8000/pharmacy_location/')
-  //   .then(response => {
-  //     console.log(response.data); 
-  //   })
-  //   .catch(error => {
-  //     console.error('Error:', error); 
-  // });
-
 
   const navigate = useNavigate();
     const textRef = useRef(null);

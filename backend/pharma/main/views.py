@@ -72,28 +72,27 @@ def side_effect(medications):
     return side_effects
 
 def medicine_empty(servingsLeft, servingsPerDay):
-    return int(servingsLeft) //int(servingsPerDay)
+    days_left = []
+    for i in range(len(servingsLeft)):
+        days_left.append(servingsLeft[i] // servingsPerDay[i])
+
+    return days_left
 
 @csrf_exempt
 def medication_info(request):
     medications = []
     side_effects = {}
-    servingsLeft = None
-    servingsPerDay = None
+    servingsLeft = []
+    servingsPerDay = []
     if request.method == "POST":
-        for key, value in request.POST.items():
-            if key == 'medication':
-                medications.append(value)
-            elif key == 'servingsLeft':
-                servingsLeft = value
-            elif key == 'servingsPerDay':
-                servingsPerDay = value
+        medications = request.POST.getlist('medication')
+        servingsLeft = list(map(int, request.POST.getlist('servingsLeft')))
+        servingsPerDay = list(map(int, request.POST.getlist('servingsPerDay')))
         # Now you have all the medications, servingsLeft, and servingsPerDay
         if servingsLeft is not None and servingsPerDay is not None:
             side_effects = side_effect(medications)
             days_remaining = medicine_empty(servingsLeft, servingsPerDay)
             side_effects['days_remaining'] = days_remaining
-
             return JsonResponse(side_effects)
         else:
             return JsonResponse({"error": "servingsLeft and servingsPerDay are required"}, status=400)

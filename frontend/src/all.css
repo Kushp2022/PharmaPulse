@@ -21,3 +21,16 @@
     font-weight: 400;
     font-style: normal;
 }
+
+.medication-header {
+    font-weight: bold;
+    text-align: center;
+}
+
+.symptoms-list {
+    text-align: center;
+}
+
+.days-left {
+    font-weight: bold;
+}

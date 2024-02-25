@@ -5,15 +5,16 @@ import { Link } from 'react-router-dom';
 
 function Dashboard() {;
     const[medication, setMedication] = useState('');
-    const [daysRemaining, setDaysRemaining] = useState('');
+    const[medicines, setMedicines] = useState([]);
+    const [daysRemaining, setDaysRemaining] = useState([]);
     const [symptoms, setSymptoms] = useState([]);
     const [servingsLeft, setServingsLeft] = useState([]);
     const [servingPerDay, setServingPerDay] = useState([]);
-
+    
      function handleServingsLeft(event) {
         const info = event.target.value;
         let servingLeft = info.split(",").map(servingLeft => parseInt(servingLeft.trim()));
-        setServingsLeft(prevState => [...prevState, ...servingLeft]);
+        setServingsLeft(servingLeft);
     } 
     function handleServingsPerDay(event) {
         const info = event.target.value;
@@ -43,30 +44,72 @@ function Dashboard() {;
                 fd.append(`servingsPerDay`, servingPerDay[index]);
             });
         }
-        console.log(fd);
-        // axios.post('http://127.0.0.1:8000/medication_info/', fd,
-        // {
-        // headers: {
-        //     'Content-Type': 'multipart/form-data',
-        // }
-        // })
-        // .then(response => handleResponse(response))
-        // .catch(err => console.log(err))
+        for(let pair of fd.entries()) {
+            console.log(pair[0]+ ', '+ pair[1]); 
+        }
+        axios.post('http://127.0.0.1:8000/medication_info/', fd,
+        {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        }
+        })
+        .then(response => handleResponse(response))
+        .catch(err => console.log(err))
     }
 
-function handleResponse(medication_info) {
-    let allSymptoms = [];
-    setMedication(Object.keys(medication_info.data)[0]);
-    for (let drug in medication_info.data) {
-        console.log("this is drug", drug);
-        console.log(medication_info.data[drug]);
-        setDaysRemaining(medication_info.data[drug]); 
-        if (Array.isArray(medication_info.data[drug])) {
-            allSymptoms = allSymptoms.concat(medication_info.data[drug]); // Concatenate the symptoms
-                }
+
+    function handleResponse(medication_info) {
+        let drugs = [];
+        let allSymptoms = [];
+        let days_remaining = [];
+        for (let drug in medication_info.data){
+            if (drug == "days_remaining"){
+                days_remaining =  medication_info.data[drug];
             }
-            setSymptoms(allSymptoms); // Set the concatenated symptoms array
-        } 
+            else {
+                drugs.push(drug);
+                allSymptoms.push(medication_info.data[drug])
+            }
+        }
+
+        console.log("Drugs: ", drugs);
+        console.log("side effects: ", allSymptoms);
+        console.log("days: ", days_remaining);
+
+        setDaysRemaining(days_remaining);
+        setSymptoms(allSymptoms);
+        setMedicines(drugs);
+
+        // let allSymptoms = [];
+        // console.log(medication_info)
+        // setMedication(Object.keys(medication_info.data)[0]);
+        // for (let drug in medication_info.data) {
+        //     // console.log("this is drug", drug);
+        //     // console.log(medication_info.data[drug]);
+        //     setDaysRemaining(medication_info.data[drug]); 
+        //     if (Array.isArray(medication_info.data[drug])) {
+        //         allSymptoms = allSymptoms.concat(medication_info.data[drug]); // Concatenate the symptoms
+        //     }
+        // }
+        // setSymptoms(allSymptoms); // Set the concatenated symptoms array
+    } 
+
+    useEffect(() => {
+        // Create script element
+        const script = document.createElement('script');
+        script.src = 'https://www.chatbase.co/embed.min.js';
+        script.defer = true;
+        script.chatbotId = '94m0GkabA0Ao1x7jN4fU9';
+        script.domain = 'www.chatbase.co';
+    
+        // Append script to the document body
+        document.body.appendChild(script);
+    
+        // Clean up function to remove script when component unmounts
+        return () => {
+          document.body.removeChild(script);
+        };
+      }, []);
 
     return (
          <div className="relative w-full h-screen mainAppDiv">
@@ -104,20 +147,25 @@ function handleResponse(medication_info) {
                     {/* Second half dispays info*/}
                     <div className="w-full p-20 pr-10 ml-24 flex items-center justify-center h-screen">
                         <div className="bg-stone-100 w-full h-5/6 rounded-2xl flex items-center p-10 mb-20 border border-gray-300 shadow-xl">
-                            <h1 className=""></h1>
-                                {medication && daysRemaining && symptoms && (
-                                    <ul>
-                                        <li>Medication: {medication}</li>
-                                        <li>Symptoms:
-                                           <ul className='p-2'>
-                                                {symptoms.map((symptom, index) => (
-                                                    <li key={index}>{symptom}</li>
-                                                ))}
+                            {medicines && daysRemaining && symptoms && (
+                                <div className="flex flex-row">
+                                    {medicines.map((medicine, index) => (
+                                        <div key={index} className="m-4">
+                                            <h1 className="medication-header">Medication: <br/> {medicine}</h1>
+                                            <ul>
+                                                <li className="symptoms-list font-bold">Symptoms:
+                                                    <ul className='p-2'>
+                                                        {symptoms[index].map((symptom, symptomIndex) => (
+                                                            <li key={symptomIndex}>{symptom}</li>
+                                                        ))}
+                                                    </ul>
+                                                </li>
+                                                <li className="days-left">Days Remaining: {daysRemaining[index]}</li>
                                             </ul>
-                                        </li>
-                                        <li>Days Remaining: {daysRemaining}</li>
-                                    </ul>
-                                )}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
