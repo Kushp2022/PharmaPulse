@@ -121,17 +121,17 @@ function Dashboard() {;
                         
                     {/* Second half dispays info*/}
                     <div className="w-full p-20 pr-10 ml-24 flex items-center justify-center h-screen">
-                        <div className="bg-stone-100 w-full h-5/6 rounded-2xl flex items-center p-10 mb-20 border border-gray-300 shadow-xl">
+                        <div className="bg-stone-100 w-full h-5/6 rounded-2xl flex items-center p-10 mr-8 mb-20 border border-gray-300 shadow-xl">
                             {medicines && daysRemaining && symptoms && (
-                                <div className="flex flex-row">
+                                <div className="flex flex-row text-xl font-sans">
                                     {medicines.map((medicine, index) => (
                                         <div key={index} className="m-4">
-                                            <h1 className="medication-header">Medication: <br/> {medicine}</h1>
+                                            <h1 className="medication-header"><strong>Medication: </strong><br/> {medicine.charAt(0).toUpperCase() + medicine.slice(1)}</h1>
                                             <ul>
-                                                <li className="symptoms-list font-bold">Symptoms:
+                                                <li className="symptoms-list pt-2"><strong>Symptoms: </strong>
                                                     <ul className='p-2'>
                                                         {symptoms[index].map((symptom, symptomIndex) => (
-                                                            <li key={symptomIndex}>{symptom}</li>
+                                                            <li key={symptomIndex}>{symptom.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase())}</li>
                                                         ))}
                                                     </ul>
                                                 </li>
