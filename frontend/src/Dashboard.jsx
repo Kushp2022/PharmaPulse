@@ -3,90 +3,55 @@ import axios from 'axios';
 import Vector from './assets/Vector.svg';
 import { Link } from 'react-router-dom';
 
-function Dashboard() {
-
-    const[servingsLeft, setServingsLeft] = useState();
-    const[servingsPerDay, setServingsPerDay] = useState();
-    const[longitude, setLongitude] = useState();
-    const[latitude, setLatitude] = useState();
+function Dashboard() {;
     const[medication, setMedication] = useState('');
     const [daysRemaining, setDaysRemaining] = useState('');
     const [symptoms, setSymptoms] = useState([]);
+    const [servingsLeft, setServingsLeft] = useState([]);
+    const [servingPerDay, setServingPerDay] = useState([]);
 
-    const findMyState = () => {
-        const status = document.querySelector('.status');
-        const success = (position) => {
-            console.log(position);
-            setLatitude(position.coords.latitude);
-            setLongitude(position.coords.longitude);
-        }
-
-        const error = () => {
-            status.textContent = 'Unable to retrieve your location';
-        }
-        navigator.geolocation.getCurrentPosition(success, error);
-        console.log(latitude, longitude);
-    }
-
-    const getPharmacies = () => {
-        if(latitude && longitude){
-            console.log(longitude, latitude)
-            const fd = new FormData();
-            fd.append('latitude', latitude);
-            fd.append('longitude', longitude);
-            axios.post('http://127.0.0.1:8000/pharmacy_location/', fd,
-            {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            }
-            })
-            .then(response => handleResponse(response))
-            .catch(err => console.log(err))
-        }
-    }
      function handleServingsLeft(event) {
         const info = event.target.value;
-        let servingsLeft = info.split(",").map(servingsLeft => parseInt(servingsLeft.trim()));
-        return servingsLeft;
+        let servingLeft = info.split(",").map(servingLeft => parseInt(servingLeft.trim()));
+        setServingsLeft(prevState => [...prevState, ...servingLeft]);
     } 
     function handleServingsPerDay(event) {
         const info = event.target.value;
         let servingsPerDay = info.split(",").map(servingsPerDay => parseInt(servingsPerDay.trim()));
-        return servingsPerDay;
+        setServingPerDay(prevState => [...prevState, ...servingsPerDay]);
     }
 
     
-    function userMedications(event, servingsLeft, servingsPerDay) {
+    function userMedications(event) {
         const info = event.target.value;
         let medications = info.split(",").map(medication => medication.trim());
-       // let servingsLeft = info.split(",").map(servingsLeft => servingsLeft.trim());
-        //let servingsPerDay = info.split(",").map(servingsPerDay => servingsPerDay.trim());
-        
-        const fd = new FormData();
-        medications.forEach((medication, index) => {
-            fd.append(`medication`, medication);
-            fd.append(`servingsLeft`, servingsLeft[index]);
-            fd.append(`servingsPerDay`, servingsPerDay[index]);
-
-        });
-        // servingsLeft.forEach((servingsLeft, index) => {
-        //     fd.append(`servingsLeft`, servingsLeft);
-        // });
-       // fd.append('servingsLeft', servingsLeft);
-        // servingsPerDay.forEach((servingsPerDay, index) => {
-        //     fd.append(`servingsPerDay`, servingsPerDay);
-        // });
-      //  fd.append('servingsPerDay', servingsPerDay);
-
-        //console.log(servingsLeft, servingsPerDay);
-        axios.post('http://127.0.0.1:8000/medication_info/', fd,
-        {
-        headers: {
-            'Content-Type': 'multipart/form-data',
+        console.log("medications: ", medications);
+        console.log(servingsLeft);
+        console.log(servingPerDay);
+        if(medications.length != servingsLeft.length || medications.length != servingPerDay.length){
+            alert("All fields must be same length");
+            return;
         }
-        })
-        .then(response => handleResponse(response))
-        .catch(err => console.log(err))
+        const fd = new FormData();
+        if(servingsLeft && servingPerDay){
+            medications.forEach((medication, index) => {
+                console.log(medication);
+                fd.append(`medication`, medication);
+                console.log(servingsLeft[index]);
+                fd.append(`servingsLeft`, servingsLeft[index]);
+                console.log(servingPerDay[index]);
+                fd.append(`servingsPerDay`, servingPerDay[index]);
+            });
+        }
+        console.log(fd);
+        // axios.post('http://127.0.0.1:8000/medication_info/', fd,
+        // {
+        // headers: {
+        //     'Content-Type': 'multipart/form-data',
+        // }
+        // })
+        // .then(response => handleResponse(response))
+        // .catch(err => console.log(err))
     }
 
 function handleResponse(medication_info) {
@@ -101,17 +66,12 @@ function handleResponse(medication_info) {
                 }
             }
             setSymptoms(allSymptoms); // Set the concatenated symptoms array
-        }
-
-
-    useEffect(() => {
-        findMyState(); // This will be called once when the component mounts
-    }, []); 
+        } 
 
     return (
          <div className="relative w-full h-screen mainAppDiv">
             {/* Background SVG */}
-            <img src={Vector} alt="Background SVG" className="absolute z-0 h-full object-cover right-[-13rem] top-10" />
+            <img src={Vector} alt="Background SVG" className="absolute z-0 h-full object-cover right-[-13rem] top-14" />
 
             {/* Second main Div */}
             <div className="relative z-10">

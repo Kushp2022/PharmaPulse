@@ -39,7 +39,7 @@ def pharmacy_location(request):
                     "locationBias": {
                         "circle": {
                             "center": {"latitude": latitude, "longitude": longitude},
-                            "radius": 15000
+                            "radius": 1500
                         }
                     }
                 }
