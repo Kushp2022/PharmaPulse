@@ -49,3 +49,16 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+.medication-header {
+    font-weight: bold;
+    text-align: center;
+}
+
+.symptoms-list {
+    text-align: center;
+}
+
+.days-left {
+    font-weight: bold;
+}
