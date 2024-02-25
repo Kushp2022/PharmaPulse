@@ -20,8 +20,8 @@ def home(request):
 
 @csrf_exempt
 def send_text(request):
-    account_sid = 'ACeab9300705cfcb4b181cfe05916e28ad'
-    auth_token = 'b6cd3d5579658144dd4a23eb2a8be01d'
+    account_sid = '{you_account_sid}'
+    auth_token = '{your_auth_token}'
     client = Client(account_sid, auth_token)
     PHONE_NUM = '+18447345883'
     user_num = '+1'
@@ -63,7 +63,7 @@ def pharmacy_location(request):
                 url = 'https://places.googleapis.com/v1/places:searchText'
                 headers = {
                     'Content-Type': 'application/json',
-                    'X-Goog-Api-Key': 'AIzaSyBCyHgxiac8jCmqKSEoDOKIlj4hd5l4__U',
+                    'X-Goog-Api-Key': '{your_api_key}',
                     'X-Goog-FieldMask': 'places.displayName,places.formattedAddress'
                 }
                 data = {

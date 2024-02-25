@@ -26,7 +26,7 @@ function Pharmacy() {
 
     const geocodeAddress = async (address) => {
         try {
-          const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=AIzaSyBCyHgxiac8jCmqKSEoDOKIlj4hd5l4__U`);
+          const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key={API_KEY}`);
           if (response.data.results && response.data.results.length > 0) {
             const location = response.data.results[0].geometry.location;
             return { latitude: location.lat, longitude: location.lng };

@@ -11,7 +11,7 @@ import Shopping from './Shopping.jsx';
 const root = document.getElementById('root');
 ReactDOM.render(
   <React.StrictMode>
-    <GoogleOAuthProvider clientId="95639048462-8lsi1tt69rhq8sdp19hv23nmvluijcl4.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId="{Google client ID insert}">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<App />} />
