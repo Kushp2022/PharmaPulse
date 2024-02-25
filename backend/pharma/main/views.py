@@ -2,10 +2,11 @@
 from django.shortcuts import render, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from twilio.rest import Client
 import requests
 import googlemaps 
 import time
-import logging, json
+import json
 
 def miles_to_meters(miles):
     try:
@@ -16,6 +17,39 @@ def miles_to_meters(miles):
 # Create your views here.
 def home(request):
     return HttpResponse("Hello World!")
+
+@csrf_exempt
+def send_text(request):
+    account_sid = 'ACeab9300705cfcb4b181cfe05916e28ad'
+    auth_token = 'b6cd3d5579658144dd4a23eb2a8be01d'
+    client = Client(account_sid, auth_token)
+    PHONE_NUM = '+18447345883'
+    user_num = '+1'
+    if request.method == "POST":
+        num = request.POST.get("number")
+        user_num += str(num)
+        tasks = request.POST.getlist("tasks[]")
+        task_string = "\n".join(tasks)
+        print(user_num)
+        print(task_string)
+        message = client.messages.create(
+            from_='+18557730607',
+            body = f"Here's Your Shopping List: \n{task_string}",
+            to=f'{user_num}'
+        )
+        print(message.sid)
+        if message.sid:
+            return JsonResponse({"status": "Message sent successfully", "message": f"{task_string}", "sent_to": f'{user_num}'})
+        else:
+            return JsonResponse({"status": "Failed to send message"})
+    else:
+        return JsonResponse({"Some Fun": request.method})
+
+@csrf_exempt
+def get_drug_info(request):
+    if request.method == "GET":
+        return JsonResponse({"medications": MEDICINES, "days_remaining": DAYS_REMAINING})
+    return JsonResponse({"Not a Get": request.method})
 
 @csrf_exempt
 def pharmacy_location(request):
@@ -80,6 +114,7 @@ def medicine_empty(servingsLeft, servingsPerDay):
 
 @csrf_exempt
 def medication_info(request):
+    global MEDICINES, DAYS_REMAINING
     medications = []
     side_effects = {}
     servingsLeft = []
@@ -92,13 +127,14 @@ def medication_info(request):
         if servingsLeft is not None and servingsPerDay is not None:
             side_effects = side_effect(medications)
             days_remaining = medicine_empty(servingsLeft, servingsPerDay)
+            MEDICINES = medications
+            DAYS_REMAINING = days_remaining
             side_effects['days_remaining'] = days_remaining
             return JsonResponse(side_effects)
         else:
             return JsonResponse({"error": "servingsLeft and servingsPerDay are required"}, status=400)
     
     if request.method == "GET":
-        logging.debug("in get reqeuest")
         return JsonResponse({"GET: ": "Get request idk why"})
 
    # return JsonResponse({"Medication Info": "MEDICATION INFO", "Here: ": request.method})

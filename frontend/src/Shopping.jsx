@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './all.css'
 import { GoogleLogin } from '@react-oauth/google';
 import Group from './assets/Group.svg';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 
 function Shopping() {
     const [tasks,setTasks] = useState([]);
@@ -11,9 +13,8 @@ function Shopping() {
 
     const addTasks = () => {
         if(task !== ""){
-        setTasks([...tasks,task])
-        setTask("");
-        console.log(tasks);
+            setTasks([...tasks,task])
+            setTask("");
         }
     }
 
@@ -25,6 +26,61 @@ function Shopping() {
         setTasks(updatedList)
     }
 
+    const text = () => {
+        let userInput = window.prompt("Please Enter Your Phone Number:");
+        if (userInput != null){
+            console.log("phone number: ", userInput);
+            const fd = new FormData();
+            fd.append("number", userInput);
+            console.log("Tasks: ", tasks);
+            for (let i = 0; i < tasks.length; i++) {
+                fd.append("tasks[]", tasks[i]);
+            }
+
+            for(let pair of fd.entries()) {
+                console.log(pair[0]+ ', '+ pair[1]);
+            }
+            axios.post('http://127.0.0.1:8000/send_text/', fd,
+            {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+            })
+            .then(response => console.log(response))
+            .catch(err => console.log(err))
+        }
+        else{
+            console.log("Error: Didn't Enter Phone Number");
+        }
+    }
+
+    useEffect(() => {
+        fetchMedications();
+      }, [""]);
+
+      
+    const fetchMedications = async () => {
+        axios.get('http://127.0.0.1:8000/get_drug_info/')
+        .then(response => {
+            const medications = response.data.medications;
+            const daysRemaining = response.data.days_remaining;
+            const newTasks = [];
+
+            for(let i = 0; i < medications.length; i++){
+                if(daysRemaining[i] < 7){
+                    newTasks.push(medications[i]);
+                }
+                setTasks([...tasks, ...newTasks]);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error); 
+        });
+    };
+
+    // useEffect(() => {
+    //     fetchMedications();
+    // }, []);
     return (
         <div className="">
             {/* Background SVG */}
@@ -80,7 +136,7 @@ function Shopping() {
                 </div>
             </div>
             <div className=' w-1/6 mr-60 ml-auto ' style={{ position: 'relative', bottom: '10rem' }}>
-                <button className='mr-auto p-3 rounded-xl text-xl bg-green-500 text-white'>Text My Shopping Cart!</button>
+                <button className='mr-auto p-3 rounded-xl text-xl bg-green-500 text-white' onClick={text}>Text My Shopping Cart!</button>
             </div>
             
         </div>

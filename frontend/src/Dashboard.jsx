@@ -26,9 +26,6 @@ function Dashboard() {;
     function userMedications(event) {
         const info = event.target.value;
         let medications = info.split(",").map(medication => medication.trim());
-        console.log("medications: ", medications);
-        console.log(servingsLeft);
-        console.log(servingPerDay);
         if (medications.length !== servingsLeft.length || medications.length !== servingPerDay.length) {
             alert("All fields must be the same length");
             return;
@@ -36,17 +33,12 @@ function Dashboard() {;
         const fd = new FormData();
         if (servingsLeft.length > 0 && servingPerDay.length > 0) {
             medications.forEach((medication, index) => {
-                console.log(medication);
                 fd.append(`medication`, medication);
-                console.log(servingsLeft[index]);
                 fd.append(`servingsLeft`, servingsLeft[index]);
-                console.log(servingPerDay[index]);
                 fd.append(`servingsPerDay`, servingPerDay[index]);
             });
         }
-        for(let pair of fd.entries()) {
-            console.log(pair[0]+ ', '+ pair[1]); 
-        }
+
         axios.post('http://127.0.0.1:8000/medication_info/', fd,
         {
         headers: {
@@ -72,26 +64,9 @@ function Dashboard() {;
             }
         }
 
-        console.log("Drugs: ", drugs);
-        console.log("side effects: ", allSymptoms);
-        console.log("days: ", days_remaining);
-
         setDaysRemaining(days_remaining);
         setSymptoms(allSymptoms);
         setMedicines(drugs);
-
-        // let allSymptoms = [];
-        // console.log(medication_info)
-        // setMedication(Object.keys(medication_info.data)[0]);
-        // for (let drug in medication_info.data) {
-        //     // console.log("this is drug", drug);
-        //     // console.log(medication_info.data[drug]);
-        //     setDaysRemaining(medication_info.data[drug]); 
-        //     if (Array.isArray(medication_info.data[drug])) {
-        //         allSymptoms = allSymptoms.concat(medication_info.data[drug]); // Concatenate the symptoms
-        //     }
-        // }
-        // setSymptoms(allSymptoms); // Set the concatenated symptoms array
     } 
 
     useEffect(() => {
