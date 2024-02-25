@@ -12,7 +12,7 @@ PharmaPulse is a comprehensive healthcare navigation platform designed to simpli
 ## Technologies Used 🛠️
 
 - Frontend: React.js, Tailwind CSS
-- Backend: Python Django, JS
+- Backend: Python Django, Node.js
 - APIs: Google Maps API, FDA API, Google OAuth
 - Communication: Axios
 
