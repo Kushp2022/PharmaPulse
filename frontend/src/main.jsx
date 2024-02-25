@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import App from './App.jsx';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Signup from './Signup.jsx';
 import { createRoot } from 'react-dom/client';
+import Dashboard from './Dashboard.jsx'
 
 const root = document.getElementById('root');
 ReactDOM.render(
@@ -13,7 +13,7 @@ ReactDOM.render(
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<App />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </BrowserRouter>
     </GoogleOAuthProvider>

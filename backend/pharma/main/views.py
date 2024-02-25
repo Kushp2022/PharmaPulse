@@ -5,6 +5,7 @@ from django.http import JsonResponse
 import requests
 import googlemaps 
 import time
+import logging
 
 def miles_to_meters(miles):
     try:
@@ -43,18 +44,48 @@ def pharmacy_location(request):
 
 
 @csrf_exempt
-def side_effect(request):
-    drug_name = 'ibuprofen'
-    api_url = f'https://api.fda.gov/drug/event.json?api_key=BMGXMyehl1VVJzypcbKlbBWRsspTLqu997FBiMSK&search=patient.drug.openfda.brand_name:{drug_name}&count=patient.reaction.reactionmeddrapt.exact&limit=10'
-    
-    response = requests.get(api_url)
-    side_effects = {"side_effects": []}
-    if response.status_code == 200:
-        data = response.json()
-        for effect in data['results']:
-            side_effects["side_effects"].append(effect['term'])
+def side_effect(medications):
+    side_effects = {}
+    for drug_name in medications.values():
+        side_effects[drug_name] = []
+        api_url = f'https://api.fda.gov/drug/event.json?api_key=BMGXMyehl1VVJzypcbKlbBWRsspTLqu997FBiMSK&search=patient.drug.openfda.brand_name:{drug_name}&count=patient.reaction.reactionmeddrapt.exact&limit=10'
+        response = requests.get(api_url)
+        if response.status_code == 200:
+            data = response.json()
+            for effect in data['results']:
+                side_effects[drug_name].append(effect['term'])
+
+    return side_effects
+
+def medicine_empty(servingsLeft, servingsPerDay):
+    return servingsLeft // servingsPerDay
+
+@csrf_exempt
+def medication_info(request):
+    logging.debug('Medication info called')
+    medications = []
+    servingsLeft = None
+    servingsPerDay = None
+
+    if request.method == "POST":
+        logging.debug("in post request")
+        for key, value in request.POST.items():
+            if key == 'medication':
+                medications.append(value)
+            elif key == 'servingsLeft':
+                servingsLeft = value
+            elif key == 'servingsPerDay':
+                servingsPerDay = value
+
+        # Now you have all the medications, servingsLeft, and servingsPerDay
+        side_effects = side_effect(medications)
+        days_remaining = medicine_empty(servingsLeft, servingsPerDay)
+        side_effects['days_remaining'] = days_remaining
 
         return JsonResponse(side_effects)
     
+    # if request.method == "GET":
+    #     logging.debug("in get reqeuest")
+    #     return JsonResponse({"GET: ", "Get request idk why"})
 
-    return HttpResponse(f"Error: {response.status_code}")
+    return JsonResponse({"Medication Info": "MEDICATION INFO", "Here: ": request.method})
