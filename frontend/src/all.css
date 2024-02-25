@@ -9,7 +9,7 @@
 }
 
 .mainAppDiv{
-    overflow:hidden;
+    overflow-x:hidden;
 }
 .picture{
     margin-left: 21rem;
@@ -51,7 +51,6 @@
 }
 
 .medication-header {
-    font-weight: bold;
     text-align: center;
 }
 
