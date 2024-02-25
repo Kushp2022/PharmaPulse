@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react';
 import './all.css'
 import { GoogleLogin } from '@react-oauth/google';
 import WannaUseSvg from './assets/homeScreen.svg';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 
 import axios from 'axios';
 
@@ -22,7 +24,20 @@ function App() {
   //   .catch(error => {
   //     console.error('Error:', error); 
   // });
-  
+  const navigate = useNavigate();
+    const textRef = useRef(null);
+    const [textContent, setTextContent] = useState(''); // Initialize with your desired text
+
+    // Handle successful login
+    const handleSuccess = (credentialResponse) => {
+        console.log(credentialResponse);
+        navigate('/signup');
+    };
+
+    // Handle login failure
+    const handleError = () => {
+        console.log('Login Failed');
+    };
   return (
       <div className="relative mainAppDiv">
         {/* Background SVG */}
@@ -38,16 +53,21 @@ function App() {
             <li className='px-6 py-1 mt-1 text-lg font-sans'>About Us</li>
             <li className='px-6 py-1 mt-1 text-lg font-sans mr-3'>Contact Us</li>
           </ul>
-          <Link to="/signup">
-          <button className='m-2 ring-2 ring-blue-500 ring-offset-4 ring-offset-slate-50 dark:ring-offset-slate-900 bg-white px-3 rounded-lg font-sans hover:bg-blue-500'> Sign Up </button>
-          </Link>
+          <button className='m-2 ring-2 ring-blue-500 ring-offset-4 ring-offset-slate-50 dark:ring-offset-slate-900 bg-white px-3 rounded-lg font-sans hover:bg-blue-500'> Log In</button>
         </div>
 
         {/* Main container under navbar Left Side */}
         <div className='flex flex-col items-center justify-center w-6/12 h-screen z-10 p-20'>
             <h1 className='text-5xl mr-auto py-5 font-sans font-bold text-blue-900'>PharmaPulse</h1>
             <h1 className='text-4xl roboto-mono-kp text-cyan-700 pb-50'>Navigate Medication with Confidence</h1>
-            <button className='mt-10 mr-auto m-2 ring-2 ring-blue-500 ring-offset-4 ring-offset-slate-50 dark:ring-offset-slate-900 bg-white px-3 rounded-lg font-sans hover:bg-blue-500'> Sign Up </button>
+
+            {/* google login button  */}
+            <div className='pr-96 pt-10'>
+              <GoogleLogin
+                onSuccess={handleSuccess}
+                onError={handleError}
+                />
+            </div>
         </div>
 
       </div>
