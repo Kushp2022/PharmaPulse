@@ -44,7 +44,19 @@ function Dashboard() {
             .catch(err => console.log(err))
         }
     }
-    function userMedications(event) {
+     function handleServingsLeft(event) {
+        const info = event.target.value;
+        let servingsLeft = info.split(",").map(servingsLeft => parseInt(servingsLeft.trim()));
+        return servingsLeft;
+    } 
+    function handleServingsPerDay(event) {
+        const info = event.target.value;
+        let servingsPerDay = info.split(",").map(servingsPerDay => parseInt(servingsPerDay.trim()));
+        return servingsPerDay;
+    }
+
+    
+    function userMedications(event, servingsLeft, servingsPerDay) {
         const info = event.target.value;
         let medications = info.split(",").map(medication => medication.trim());
        // let servingsLeft = info.split(",").map(servingsLeft => servingsLeft.trim());
