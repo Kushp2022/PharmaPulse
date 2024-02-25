@@ -111,18 +111,18 @@ function handleResponse(medication_info) {
     return (
          <div className="relative w-full h-screen mainAppDiv">
             {/* Background SVG */}
-            <img src={Vector} alt="Background SVG" className="absolute z-0 h-full object-cover right-[-13rem] top-10" />
+            <img src={Vector} alt="Background SVG" className="absolute z-0 h-full object-cover right-[-13rem] top-14" />
 
             {/* Second main Div */}
             <div className="relative z-10">
 
                 {/* Navbar */}
                 <div className='w-full flex p-5 px-10 items-center'>
-                    <h1 className='text-2xl anta-regular'>PharmaPulse</h1>
+                    <h1 className='text-2xl anta-regular'><Link to="/">PharmaPulse</Link></h1>
                     <ul className='flex ml-auto'>
                         <li className='px-6 py-1 mt-1 text-lg font-sans'><Link to="/">Home</Link></li>
                         <li className='px-6 py-1 mt-1 text-lg font-sans'><Link to="/Pharmacy">Find a Pharmacy</Link></li>
-                        <li className='px-6 py-1 mt-1 text-lg font-sans mr-3'><Link to="/">Shopping Cart</Link></li>
+                        <li className='px-6 py-1 mt-1 text-lg font-sans mr-3'><Link to="/shopping">Shopping Cart</Link></li>
                     </ul>
                 </div>
 

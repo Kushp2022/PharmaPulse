@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
 import Dashboard from './Dashboard.jsx'
 import Pharmacy from './Pharmacy.jsx';
+import Shopping from './Shopping.jsx';
 
 const root = document.getElementById('root');
 ReactDOM.render(
@@ -16,6 +17,7 @@ ReactDOM.render(
           <Route path="/" element={<App />} />
           <Route path="/dashboard" element={<Dashboard />} />    
           <Route path="/Pharmacy" element={<Pharmacy />} />   
+          <Route path="/Shopping" element={<Shopping />} />
         </Routes>
       </BrowserRouter>
     </GoogleOAuthProvider>

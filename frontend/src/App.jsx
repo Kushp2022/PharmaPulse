@@ -49,9 +49,8 @@ function App() {
 
         {/* Navbar */}
         <div className='w-full flex p-5 px-10 relative z-10'>
-          <h1 className='text-2xl anta-regular'>PharmaPulse</h1>
+          <h1 className='text-2xl anta-regular'><Link to="/">PharmaPulse</Link></h1>
           <ul className='flex ml-auto'>
-            <li className='px-6 py-1 mt-1 text-lg font-sans'>Home</li>
             <li className='px-6 py-1 mt-1 text-lg font-sans'>About Us</li>
             <li className='px-6 py-1 mt-1 text-lg font-sans mr-3'>Contact Us</li>
           </ul>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import React from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 function Pharmacy() {
     const[longitude, setLongitude] = useState();
@@ -104,10 +105,22 @@ function Pharmacy() {
 
     return (
         <div>
-            <button style={{marginTop:"20px"}} onClick={getPharmacies}>Find Pharmacies Near Me</button>
-            {loading && <p>Loading...</p>}
-            {map && <div id="map" style={{ marginTop:'52px', height: '700px', width: '100%' }}></div>}
+            <div className='flex p-5 px-10 items-center'>
+                <h1 className='text-2xl anta-regular'><Link to="/">PharmaPulse</Link></h1>
+                    <ul className='flex ml-auto'>
+                        <li className='px-6 py-1 mt-1 text-lg font-sans'><Link to="/dashboard">Home</Link></li>
+                        <li className='px-6 py-1 mt-1 text-lg font-sans'><Link to="/Pharmacy">Find a Pharmacy</Link></li>
+                        <li className='px-6 py-1 mt-1 text-lg font-sans mr-3'><Link to="/Shopping">Shopping Cart</Link></li>
+                    </ul>
+            </div>
+            <div className='p-28 w-full h-screen'>
+        
+                <button className='text-2xl text-bold roboto-mono-kp' onClick={getPharmacies}>Here Are The Pharmacys Near You <span>&#129031;</span></button>
+                {loading && <p className='text-bold'>Loading...</p>}
+                {map && <div id="map" style={{ marginTop:'52px', height: '700px', width: '100%' }}></div>}
+            </div>
         </div>
+
     );
 }
 
