@@ -5,7 +5,7 @@ from django.http import JsonResponse
 import requests
 import googlemaps 
 import time
-import logging
+import logging, json
 
 def miles_to_meters(miles):
     try:
@@ -22,32 +22,39 @@ def pharmacy_location(request):
     longitude = None
     latitude = None
     if request.method == "POST":
-        longitude = request.POST.get("longitude")
-        latitude = request.POST.get("latitude")
-        if longitude and latitude:    
-            url = 'https://places.googleapis.com/v1/places:searchText'
-            headers = {
-                'Content-Type': 'application/json',
-                'X-Goog-Api-Key': 'AIzaSyBCyHgxiac8jCmqKSEoDOKIlj4hd5l4__U',
-                'X-Goog-FieldMask': 'places.displayName,places.formattedAddress'
-            }
-            data = {
-                "textQuery": "Pharmacies near me",
-                "openNow": True,
-                "maxResultCount": 10,
-                "locationBias": {
-                    "circle": {
-                        "center": {"latitude": latitude, "longitude": longitude},
-                        "radius": 15000
+        try:
+            latitude = request.POST.get("latitude")
+            longitude = request.POST.get("longitude")
+            if longitude and latitude:    
+                url = 'https://places.googleapis.com/v1/places:searchText'
+                headers = {
+                    'Content-Type': 'application/json',
+                    'X-Goog-Api-Key': 'AIzaSyBCyHgxiac8jCmqKSEoDOKIlj4hd5l4__U',
+                    'X-Goog-FieldMask': 'places.displayName,places.formattedAddress'
+                }
+                data = {
+                    "textQuery": "Pharmacies near me",
+                    "openNow": True,
+                    "maxResultCount": 10,
+                    "locationBias": {
+                        "circle": {
+                            "center": {"latitude": latitude, "longitude": longitude},
+                            "radius": 15000
+                        }
                     }
                 }
-            }
-            response = requests.post(url, json=data, headers=headers)
-            if response.status_code == 200:
-                pharmacies =  response.json()
-                return JsonResponse(pharmacies)
-        
-    return JsonResponse({"Error": "Nothing"})
+                response = requests.post(url, json=data, headers=headers)
+                if response.status_code == 200:
+                    pharmacies =  response.json()
+                    return JsonResponse(pharmacies)
+                else:
+                        return JsonResponse({"Error": "Failed to retrieve pharmacies","Data: ": response.json()})
+            else:
+                return JsonResponse({"Error": "Latitude or longitude is missing", "Data: ": request.POST})
+        except json.JSONDecodeError:
+            return JsonResponse({"Error": "Invalid JSON data", "Lat: ": request.POST.get("latitude"), "Long: ": request.POST.get("longitude") })
+    else:
+        return JsonResponse({"Error": "Invalid request method", "Method: ": request.method})
 
 
 @csrf_exempt
@@ -69,15 +76,11 @@ def medicine_empty(servingsLeft, servingsPerDay):
 
 @csrf_exempt
 def medication_info(request):
-    logging.debug('Medication info called')
     medications = []
     side_effects = {}
     servingsLeft = None
     servingsPerDay = None
-    latitude = None
-    longitude = None
     if request.method == "POST":
-        logging.debug("in post request")
         for key, value in request.POST.items():
             if key == 'medication':
                 medications.append(value)

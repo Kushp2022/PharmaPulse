@@ -8,40 +8,7 @@ function Dashboard() {
 
     const[servingsLeft, setServingsLeft] = useState();
     const[servingsPerDay, setServingsPerDay] = useState();
-    const[longitude, setLongitude] = useState();
-    const[latitude, setLatitude] = useState();
 
-    const findMyState = () => {
-        const status = document.querySelector('.status');
-        const success = (position) => {
-            console.log(position);
-            setLatitude(position.coords.latitude);
-            setLongitude(position.coords.longitude);
-        }
-
-        const error = () => {
-            status.textContent = 'Unable to retrieve your location';
-        }
-        navigator.geolocation.getCurrentPosition(success, error);
-        console.log(latitude, longitude);
-    }
-
-    const getPharmacies = () => {
-        if(latitude && longitude){
-            console.log(longitude, latitude)
-            const fd = new FormData();
-            fd.append('latitude', latitude);
-            fd.append('longitude', longitude);
-            axios.post('http://127.0.0.1:8000/pharmacy_location/', fd,
-            {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            }
-            })
-            .then(response => handleResponse(response))
-            .catch(err => console.log(err))
-        }
-    }
     function userMedications(event) {
         const info = event.target.value;
         let medications = info.split(",").map(medication => medication.trim());
@@ -70,10 +37,6 @@ function Dashboard() {
         }
     }
 
-    useEffect(() => {
-        findMyState(); // This will be called once when the component mounts
-    }, []); 
-
     return (
          <div className="relative w-full h-screen mainAppDiv">
             {/* Background SVG */}
@@ -87,8 +50,8 @@ function Dashboard() {
                     <h1 className='text-2xl anta-regular'>PharmaPulse</h1>
                     <ul className='flex ml-auto'>
                         <li className='px-6 py-1 mt-1 text-lg font-sans'><Link to="/">Home</Link></li>
-                        <li className='px-6 py-1 mt-1 text-lg font-sans'>Maps</li>
-                        <li className='px-6 py-1 mt-1 text-lg font-sans mr-3'>Shopping</li>
+                        <li className='px-6 py-1 mt-1 text-lg font-sans'><Link to="/Pharmacy">Find a Pharmacy</Link></li>
+                        <li className='px-6 py-1 mt-1 text-lg font-sans mr-3'><Link to="/">Shopping Cart</Link></li>
                     </ul>
                 </div>
 
@@ -105,7 +68,6 @@ function Dashboard() {
 
                         <h1 className="text-cyan-800 font-sans text-2xl font-bold py-5">What Medications Do You Take?</h1>
                         <input className="bg-gray-200 text-black p-2 rounded-md mb-2" placeholder="Ex. ibuprofen, advil, etc..." name="medications" type="text" onBlur={userMedications} />
-                        <button style={{marginTop:"20px"}} onClick={getPharmacies}>Find Pharmacies Near Me</button>
                     </div>
                         
                     {/* Second half dispays info*/}

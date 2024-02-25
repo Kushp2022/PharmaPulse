@@ -5,6 +5,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
 import Dashboard from './Dashboard.jsx'
+import Pharmacy from './Pharmacy.jsx';
 
 const root = document.getElementById('root');
 ReactDOM.render(
@@ -13,7 +14,8 @@ ReactDOM.render(
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<App />} />
-          <Route path="/dashboard" element={<Dashboard />} />        
+          <Route path="/dashboard" element={<Dashboard />} />    
+          <Route path="/Pharmacy" element={<Pharmacy />} />   
         </Routes>
       </BrowserRouter>
     </GoogleOAuthProvider>
