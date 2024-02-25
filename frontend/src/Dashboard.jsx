@@ -29,12 +29,12 @@ function Dashboard() {;
         console.log("medications: ", medications);
         console.log(servingsLeft);
         console.log(servingPerDay);
-        if(medications.length != servingsLeft.length || medications.length != servingPerDay.length){
-            alert("All fields must be same length");
+        if (medications.length !== servingsLeft.length || medications.length !== servingPerDay.length) {
+            alert("All fields must be the same length");
             return;
         }
         const fd = new FormData();
-        if(servingsLeft && servingPerDay){
+        if (servingsLeft.length > 0 && servingPerDay.length > 0) {
             medications.forEach((medication, index) => {
                 console.log(medication);
                 fd.append(`medication`, medication);
