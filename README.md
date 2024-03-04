@@ -23,3 +23,6 @@ To get started with PharmaPulse, follow these steps:
 1. Clone the repository:
 2. Install dependencies:
 3. Run the development server:
+
+## Check it Out!
+<iframe width="560" height="315" src="https://www.youtube.com/embed/2P9fd0QNz4M?si=RbXBoEHVufNkIgOc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
